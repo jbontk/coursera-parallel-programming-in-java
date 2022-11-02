@@ -1,7 +1,6 @@
 package edu.coursera.parallel;
 
 import java.util.*;
-import java.util.concurrent.ConcurrentMap;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
@@ -110,11 +109,11 @@ public final class StudentAnalytics {
         if (studentArray == null) {
             return null;
         }
-        ConcurrentMap<String, Long> map = Arrays.stream(studentArray)
+        Map<String, Long> map = Arrays.stream(studentArray)
                 .parallel()
                 .filter(s -> !s.checkIsCurrent())
                 .map(Student::getFirstName)
-                .collect(Collectors.groupingByConcurrent(Function.identity(), Collectors.counting()));
+                .collect(Collectors.groupingBy(Function.identity(), Collectors.counting()));
         return map.entrySet()
                 .parallelStream()
                 .max(Map.Entry.comparingByValue())
